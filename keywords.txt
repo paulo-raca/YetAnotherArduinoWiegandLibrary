@@ -1,0 +1,30 @@
+#######################################
+# Syntax Coloring Map for Sodaq_PcInt
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Wiegand	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+end	KEYWORD2
+flush	KEYWORD2
+onReceive	KEYWORD2
+onStateChange	KEYWORD2
+set_pin	KEYWORD2
+set_data0	KEYWORD2
+set_data1	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+WIEGAND_LENGTH_AUTO	LITERAL1
+WIEGAND_TIMEOUT	LITERAL1
+WIEGAND_MAX_BYTES	LITERAL1
