@@ -148,8 +148,8 @@ void Wiegand::add_bit(bool value) {
 
 
 // Updates the state of 
-void Wiegand::set_pin(uint8_t pin_value, bool pin_state) {
-    uint8_t pin_mask = pin_value ? PIN_1 : PIN_0;
+void Wiegand::setPinState(uint8_t pin, bool pin_state) {
+    uint8_t pin_mask = pin? PIN_1 : PIN_0;
     
     //No change? Abort!
     if (bool(state & pin_mask) == pin_state) {
@@ -173,7 +173,7 @@ void Wiegand::set_pin(uint8_t pin_value, bool pin_state) {
               func_state(true, func_state_param);
             }
         }
-        add_bit(pin_value);
+        add_bit(pin);
 
     //Both pins off - Device is unplugged
     } else if ( !(state & MASK_PINS) ) {

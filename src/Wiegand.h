@@ -1,6 +1,6 @@
 #define WIEGAND_LENGTH_AUTO     0
 
-#define WIEGAND_TIMEOUT        10
+#define WIEGAND_TIMEOUT       100
 #define WIEGAND_MAX_BYTES       4
 
 #include <stdint.h>
@@ -55,15 +55,15 @@ public:
   }
   
   //Notifies the library that the pin Data-`pin_value` has changed to `pin_state`
-  void set_pin(uint8_t pin_value, bool pin_state);
+  void setPinState(uint8_t pin, bool pin_state);
   
   //Notifies the library that the pin Data0 has changed to `pin_state`
-  inline void set_data0(bool state) {
-    set_pin(0, state);
+  inline void setPin0State(bool state) {
+    setPinState(0, state);
   }
   
   //Notifies the library that the pin Data1 has changed to `pin_state`
-  inline void set_data1(bool state) {
-    set_pin(1, state);
+  inline void setPin1State(bool state) {
+    setPinState(1, state);
   }
 };

@@ -17,8 +17,8 @@ void setup()
   pinMode(PIN_D1, INPUT);
   attachInterrupt(digitalPinToInterrupt(PIN_D0), WiegandInt, CHANGE);
   attachInterrupt(digitalPinToInterrupt(PIN_D1), WiegandInt, CHANGE);
-  wiegand.set_data0(digitalRead(PIN_D0));
-  wiegand.set_data1(digitalRead(PIN_D1));
+  wiegand.setPin0State(digitalRead(PIN_D0));
+  wiegand.setPin1State(digitalRead(PIN_D1));
 }
 
 void loop() {
@@ -29,8 +29,8 @@ void loop() {
 }
 
 void WiegandInt() {
-  wiegand.set_data0(digitalRead(PIN_D0));
-  wiegand.set_data1(digitalRead(PIN_D1));
+  wiegand.setPin0State(digitalRead(PIN_D0));
+  wiegand.setPin1State(digitalRead(PIN_D1));
 }
 
 void stateChanged(bool plugged, const char* message) {

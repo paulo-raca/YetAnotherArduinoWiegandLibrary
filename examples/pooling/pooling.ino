@@ -15,14 +15,14 @@ void setup()
 
   pinMode(PIN_D0, INPUT);
   pinMode(PIN_D1, INPUT);
-  wiegand.set_data0(digitalRead(PIN_D0));
-  wiegand.set_data1(digitalRead(PIN_D1));
+  wiegand.setPin0State(digitalRead(PIN_D0));
+  wiegand.setPin1State(digitalRead(PIN_D1));
 }
 
 void loop() {
   wiegand.flush();
-  wiegand.set_data0(digitalRead(PIN_D0));
-  wiegand.set_data1(digitalRead(PIN_D1));
+  wiegand.setPin0State(digitalRead(PIN_D0));
+  wiegand.setPin1State(digitalRead(PIN_D1));
 }
 
 void stateChanged(bool plugged, const char* message) {
