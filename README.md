@@ -78,11 +78,12 @@ void stateChanged(bool plugged, const char* message) {
 
 // Notifies when a card was read.
 // Instead of a message, the seconds parameter can be anything you want -- Whatever you specify on `wiegand.onReceive()`
-void receivedData(uint8_t* data, uint8_t datalen, const char* message) {
+void receivedData(uint8_t* data, uint8_t bits, const char* message) {
     Serial.print(message);    
 
     //Print value in HEX
-    for (int i=0; i<datalen; i++) {
+    uint8_t bytes = (bits+7)/8;
+    for (int i=0; i<bytes; i++) {
         Serial.print(data[i] >> 4, 16);
         Serial.print(data[i] & 0xF, 16);
     }
@@ -139,7 +140,7 @@ There are examples on how to use it with [Interruptions](examples/interrupts/int
 
 ## Receiving Data
 
-Use `Wiegand.onReceive()` to listen to messages.
+Use `Wiegand.onReceive()` to listen to messages. The listener receives the databuffer and number of bits (Parity bits are not present on the buffer and are not accounted on the number of bits).
 
 Keep in mind that messages with unexpected sizes, invalid checksums, etc, are silently ignored.
 

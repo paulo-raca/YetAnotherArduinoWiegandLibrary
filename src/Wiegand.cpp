@@ -53,7 +53,7 @@ void Wiegand::flushData() {
         // And it is valid: parity checks out, no overflow.
         if ( !(state & FLAG_INVALID) && ((state & (FLAG_PARITY_LEFT | FLAG_PARITY_RIGHT)) == FLAG_PARITY_RIGHT) ) {
             if (func_data) {
-                func_data(data, (bits+5)/8, func_data_param);
+                func_data(data, bits-2, func_data_param);
             }
         }
     }

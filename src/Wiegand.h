@@ -7,7 +7,7 @@
 
 class Wiegand {
 private:
-  typedef void (*data_callback)(uint8_t* data, uint8_t datalen, void* param);
+  typedef void (*data_callback)(uint8_t* data, uint8_t bits, void* param);
   typedef void (*state_callback)(bool plugged, void* param);
   
   uint8_t expected_bits;
@@ -42,7 +42,7 @@ public:
   operator bool();
 
   //Attaches a Data Receive Callback. This will be called whenever a message has been received without errors.
-  template<typename T> void onReceive(void (*func)(uint8_t* data, uint8_t datalen, T* param), T* param=nullptr) {
+  template<typename T> void onReceive(void (*func)(uint8_t* data, uint8_t bits, T* param), T* param=nullptr) {
     func_data = (data_callback)func;
     func_data_param = (void*)param;
   }
