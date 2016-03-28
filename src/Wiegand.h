@@ -20,10 +20,10 @@ private:
   void* func_data_param;
   void* func_state_param;
 
-  inline void write_bit(uint8_t i, bool value);
-  inline bool read_bit(uint8_t i);
-  void add_bit(bool value);
-  void flush_data();
+  inline void writeBit(uint8_t i, bool value);
+  inline bool readBit(uint8_t i);
+  void addBit(bool value);
+  void flushData();
   void reset();
   
 public:
@@ -42,14 +42,14 @@ public:
   operator bool();
 
   //Attaches a Data Receive Callback. This will be called whenever a message has been received without errors.
-  template<typename T> void onReceive(void (*func)(uint8_t* data, uint8_t datalen, T* param), T* param) {
+  template<typename T> void onReceive(void (*func)(uint8_t* data, uint8_t datalen, T* param), T* param=nullptr) {
     func_data = (data_callback)func;
     func_data_param = (void*)param;
   }
   
   //Attaches a State Change Callback. This is called whenever a device is attached or dettached.
   //If you have a dettachable device, add pull down resistors to both data lines, otherwise random noise will produce lots of bogus State Change notifications (and a few Data Received notifications)
-  template<typename T> void onStateChange(void (*func)(bool plugged, T* param), T* param) {
+  template<typename T> void onStateChange(void (*func)(bool plugged, T* param), T* param=nullptr) {
     func_state = (state_callback)func;
     func_state_param = (void*)param;
   }

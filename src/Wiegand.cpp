@@ -47,7 +47,7 @@ Wiegand::operator bool() {
 
 
 // If we have a complete payload on the buffer and parity checks out, sends a notification.
-void Wiegand::flush_data() {
+void Wiegand::flushData() {
     // If the frame has the expected size
     if ( (bits == expected_bits) || ( ((expected_bits == WIEGAND_LENGTH_AUTO) && ( (bits == 26) || (bits == 34) ) ) ) ) {
         // And it is valid: parity checks out, no overflow.
@@ -72,7 +72,7 @@ void Wiegand::flush() {
     // Resets state if nothing happened in a few milliseconds
     if (elapsed > WIEGAND_TIMEOUT) {
         // Might have a pending data package, if expected_bits == WIEGAND_LENGTH_AUTO
-        flush_data();
+        flushData();
         reset();
     }
 }
@@ -81,7 +81,7 @@ void Wiegand::flush() {
 
 
 // Sets the value of the `i`-th payload bit
-inline void Wiegand::write_bit(uint8_t i, bool value) {
+inline void Wiegand::writeBit(uint8_t i, bool value) {
     if (value) {
         data[i>>3] |=  (0x80 >> (i&7));
     } else {
@@ -91,12 +91,12 @@ inline void Wiegand::write_bit(uint8_t i, bool value) {
 
 
 // Reads the value of the `i`-th payload bit
-inline bool Wiegand::read_bit(uint8_t i) {
+inline bool Wiegand::readBit(uint8_t i) {
     return bool(data[i>>3] & (0x80 >> (i&7)));
 }
 
 
-void Wiegand::add_bit(bool value) {
+void Wiegand::addBit(bool value) {
     //Skip if it is not initialized / Not ready.
     if (!*this) {
         return;
@@ -119,7 +119,7 @@ void Wiegand::add_bit(bool value) {
         // Store data bit
         // Notice that we perform a delayed write, because we have to ignore the first and last bits (the parity bits)
         if (bits >= 2) {
-            write_bit(bits-2, state & FLAG_LAST_BIT);
+            writeBit(bits-2, state & FLAG_LAST_BIT);
         }
         
         // Updates parity
@@ -129,7 +129,7 @@ void Wiegand::add_bit(bool value) {
         // As data grows, the bits that were considered part of the "Right" become part of the "Left".
         // This chunk updates the parity flags accordingly
         if (bits&1 && bits>=3) {
-            if (read_bit((bits-3)/2)) {
+            if (readBit((bits-3)/2)) {
                 state ^= FLAG_PARITY_LEFT | FLAG_PARITY_RIGHT;
             }
         }
@@ -139,7 +139,7 @@ void Wiegand::add_bit(bool value) {
 
     // If we know the number of bits, there is no need to wait for the timeout to send the data
     if (expected_bits && (bits == expected_bits)) {
-        flush_data();
+        flushData();
         state |= FLAG_INVALID;
     }
 }
@@ -173,7 +173,7 @@ void Wiegand::setPinState(uint8_t pin, bool pin_state) {
               func_state(true, func_state_param);
             }
         }
-        add_bit(pin);
+        addBit(pin);
 
     //Both pins off - Device is unplugged
     } else if ( !(state & MASK_PINS) ) {
