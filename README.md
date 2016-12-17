@@ -13,7 +13,7 @@ _It is event-driven_!
 - The extra `void*` parameter on the callbacks are useful if you are using instances in your code.
 
 _It is hardware-agnostic_!
-- It's up to you to detect input changes. You may use [External Interruptions](examples/interrupts/interrupts.ino), [Pooling](examples/pooling/pooling.ino), or something else.
+- It's up to you to detect input changes. You may use [External Interruptions](examples/interrupts/interrupts.ino), [Polling](examples/polling/polling.ino), or something else.
 
 
 
@@ -134,7 +134,7 @@ Since the hardware changes a lot, this library doesn't assume anything on how to
 
 When the state of a pin has changed, it's up to you to call `Wiegand.setPinState(pin, state)`.
 
-There are examples on how to use it with [Interruptions](examples/interrupts/interrupts.ino) and [Pooling](examples/pooling/pooling.ino) on Arduinos.
+There are examples on how to use it with [Interruptions](examples/interrupts/interrupts.ino) and [Polling](examples/polling/polling.ino) on Arduinos.
 (You probably want to use interruptions)
 
 

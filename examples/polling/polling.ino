@@ -25,7 +25,7 @@ void setup() {
   pinMode(PIN_D1, INPUT);
 }
 
-// Continuously checks for pending messages and pools updates from the wiegand inputs
+// Continuously checks for pending messages and polls updates from the wiegand inputs
 void loop() {
   // Checks for pending messages 
   wiegand.flush();
