@@ -46,7 +46,7 @@ void wiegandD0Changed(Wiegand *wiegand, bool value) {
 }
 void wiegandD1Changed(Wiegand *wiegand, bool value) {
   wiegand->setPin1State(value);
-}                                                  
+}
 
 // Notifies when a reader has been connected or disconnected.
 // Instead of a message, the seconds parameter can be anything you want -- Whatever you specify on `wiegand.onStateChange()`
@@ -59,7 +59,7 @@ void stateChanged(bool plugged, const char* message) {
 // Instead of a message, the seconds parameter can be anything you want -- Whatever you specify on `wiegand.onReceive()`
 void receivedData(uint8_t* data, uint8_t bits, const char* message) {
     Serial.println(message);
-  
+
     //Print value in HEX
     uint8_t bytes = (bits+7)/8;
     for (int i=0; i<bytes; i++) {

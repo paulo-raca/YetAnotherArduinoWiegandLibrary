@@ -27,7 +27,7 @@ void Wiegand::begin(uint8_t bits) {
 }
 
 
-void Wiegand::end() { 
+void Wiegand::end() {
     state &= MASK_PINS | SETUP_READY;
 }
 
@@ -67,7 +67,7 @@ void Wiegand::flush() {
     if (!*this) {
         return;
     }
-    
+
     unsigned long elapsed = millis() - timestamp;
     // Resets state if nothing happened in a few milliseconds
     if (elapsed > WIEGAND_TIMEOUT) {
@@ -108,20 +108,20 @@ void Wiegand::addBit(bool value) {
     if (state & FLAG_INVALID) {
         return;
     }
-    
+
     // Special case for 1st bit
     if (bits == 0) {
         if (value) {
             state |= FLAG_PARITY_LEFT;
         }
-    
+
     } else {
         // Store data bit
         // Notice that we perform a delayed write, because we have to ignore the first and last bits (the parity bits)
         if (bits >= 2) {
             writeBit(bits-2, state & FLAG_LAST_BIT);
         }
-        
+
         // Updates parity
         if (value) {
             state ^= FLAG_PARITY_RIGHT;
@@ -147,21 +147,21 @@ void Wiegand::addBit(bool value) {
 
 
 
-// Updates the state of 
+// Updates the state of
 void Wiegand::setPinState(uint8_t pin, bool pin_state) {
     uint8_t pin_mask = pin? PIN_1 : PIN_0;
-    
+
     //No change? Abort!
     if (bool(state & pin_mask) == pin_state) {
         return;
     } else if (pin_state) {
         state |= pin_mask;
     } else {
-        state &= ~pin_mask;     
+        state &= ~pin_mask;
     }
 
     //Flush old events
-    flush();   
+    flush();
     timestamp = millis();
 
     //Both pins on - Databit received

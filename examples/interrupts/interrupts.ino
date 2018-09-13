@@ -57,7 +57,7 @@ void stateChanged(bool plugged, const char* message) {
 // Notifies when a card was read.
 // Instead of a message, the seconds parameter can be anything you want -- Whatever you specify on `wiegand.onReceive()`
 void receivedData(uint8_t* data, uint8_t bits, const char* message) {
-    Serial.print(message);    
+    Serial.print(message);
 
     //Print value in HEX
     uint8_t bytes = (bits+7)/8;
