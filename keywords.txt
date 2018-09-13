@@ -7,6 +7,7 @@
 #######################################
 
 Wiegand	KEYWORD1
+DataError	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -14,17 +15,28 @@ Wiegand	KEYWORD1
 
 begin	KEYWORD2
 end	KEYWORD2
+reset	KEYWORD2
 flush	KEYWORD2
+flushNow	KEYWORD2
 onReceive	KEYWORD2
+onReceiveError	KEYWORD2
 onStateChange	KEYWORD2
-set_pin	KEYWORD2
-set_data0	KEYWORD2
-set_data1	KEYWORD2
+setPinState	KEYWORD2
+setPin0State	KEYWORD2
+setPin1State	KEYWORD2
+receivedBit	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
 #######################################
 
-WIEGAND_LENGTH_AUTO	LITERAL1
-WIEGAND_TIMEOUT	LITERAL1
-WIEGAND_MAX_BYTES	LITERAL1
+Communication	LITERAL1
+SizeTooBig	LITERAL1
+SizeUnexpected	LITERAL1
+DecodeFailed	LITERAL1
+VerificationFailed	LITERAL1
+
+LENGTH_ANY	LITERAL1
+TIMEOUT	LITERAL1
+MAX_BITS	LITERAL1
+MAX_BYTES	LITERAL1
