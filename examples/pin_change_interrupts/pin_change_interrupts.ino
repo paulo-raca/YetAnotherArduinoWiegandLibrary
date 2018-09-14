@@ -8,8 +8,8 @@
 
 // These are the pins connected to the Wiegand D0 and D1 signals.
 // Ensure your board supports external Pin Change Interrupts on these pins
-#define PIN_D0 2
-#define PIN_D1 3
+#define PIN_D0 8
+#define PIN_D1 9
 
 // The object that handles the wiegand protocol
 Wiegand wiegand;
