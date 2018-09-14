@@ -264,12 +264,14 @@ void Wiegand::setPinState(uint8_t pin, bool pin_state) {
     uint8_t pin_mask = pin ? PIN_1 : PIN_0;
 
     flush();
-    timestamp = millis();
 
     //No change? Abort!
     if (bool(state & pin_mask) == pin_state) {
         return;
-    } else if (pin_state) {
+    }
+
+    timestamp = millis();
+    if (pin_state) {
         state |= pin_mask;
     } else {
         state &= ~pin_mask;
