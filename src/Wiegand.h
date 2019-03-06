@@ -21,7 +21,7 @@ public:
      */
     static const uint8_t MAX_BITS = 64;
 
-        /**
+    /**
      * 34-bit is the maximum I've seen used for Wiegand
      */
     static const uint8_t MAX_BYTES = ((MAX_BITS + 7)/8);
