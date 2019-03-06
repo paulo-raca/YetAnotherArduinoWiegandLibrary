@@ -5,8 +5,8 @@ A library to received data from Wiegand RFID Card readers.
 ## Features
 _Support multiple data formats_!
 - It can detect the message size format automatically!
-- 26 and 34 bits are tested and work fine
-- Should work with most other formats (Let me know if you test it)
+- 4, 8, 26 and 34 bits are tested and work fine
+- Should work other formats (Let me know)
 
 _It is event-driven_!
 - You don't ask if there is a card, a callback will tell you when there is one.
