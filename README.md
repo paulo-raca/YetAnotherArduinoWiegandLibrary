@@ -2,7 +2,9 @@
 
 A library to received data from Wiegand RFID Card readers.
 
+
 ## Features
+
 _Support multiple data formats_!
 - It can detect the message size format automatically!
 - 4, 8, 26 and 34 bits are tested and work fine
@@ -10,11 +12,10 @@ _Support multiple data formats_!
 
 _It is event-driven_!
 - You don't ask if there is a card, a callback will tell you when there is one.
-- The extra `void*` parameter on the callbacks are useful if you are using instances in your code.
+- The extra `void*` parameter on the callbacks are useful if you are using multiple Wiegand instances in your code.
 
 _It is hardware-agnostic_!
 - It's up to you to detect input changes. You may use [External Interruptions](examples/interrupts/interrupts.ino), [Polling](examples/polling/polling.ino), or something else.
-
 
 
 # How to use it
@@ -111,7 +112,6 @@ void receivedDataError(Wiegand::DataError error, uint8_t* rawData, uint8_t rawBi
 ```
 
 
-
 # Wiegand Protocol
 
 The Wiegand protocol is very and easy to implement, but is poorly standarlized.
@@ -134,15 +134,25 @@ Having both pins to `LOW` is an invalid state, and usually means that the card r
 
 This is where things get hairy: Many vendors have defined their own message formats, with different sizes, fields, parity checks and layouts.
 
-This library attemps to support different message sizes, but only supports the most common layout:
+These are the most common formats seen in the wild:
+
+
+### 26 and 34 bits formats
+
+These are the most common formats, tipically used on RFID card readers.
+
 - The first and the last bits of the message are used for parity checks.
 - The first half of the bits must have EVEN parity.
 - The second half of the bits must have ODD parity.
-- If the message has an odd number of bits, the center bit is used on both parity checks.
 
-Also, Wiegand messages are often split in fields with different semantics. E.g., Facility code + Card Number.
-This library ignores that and returns the data as one big data buffer (bits are received in big-endian order)
 
+### 4 and 8 bit format
+
+These formats are sometimes used on keypads.
+
+On the 4-bit format, the digit is encoded in 4 bits, no extra stuff is added.
+
+On the 8-bit format, the digit is encoded in the lower 4 bits, and the higher 4 bits if the "NOT" of the digit.
 
 
 # This Library
@@ -153,24 +163,50 @@ Since the hardware changes a lot, this library doesn't assume anything on how to
 
 When the state of a pin has changed, it's up to you to call `Wiegand.setPinState(pin, state)`.
 
-There are examples on how to use it with [Interruptions](examples/interrupts/interrupts.ino) and [Polling](examples/polling/polling.ino) on Arduinos.
+There are examples on how to use it with [Interruptions](examples/interrupts/interrupts.ino) and [Polling](examples/polling/polling.ino) on Arduinos. 
+
 (You probably want to use interruptions)
 
 
 ## Receiving Data
 
-Use `Wiegand.onReceive()` to listen to messages. The listener receives the databuffer and number of bits (Parity bits are not present on the buffer and are not accounted on the number of bits).
+Use `Wiegand.onReceive()` to listen to messages.
 
-Keep in mind that messages with unexpected sizes, invalid checksums, etc, are silently ignored.
+The listener receives the databuffer and number of bits.
+
+If the Wiegand is initialized with `decode_messages=true` (the default), any parity/check bits are removed from the payload. (E.g., On a 26-bits message, the decoded payload has only 24-bits)
 
 
-### Automatic message size detection
+## Handling error Data
 
-If the message size is specified on `Wiegand.begin(size)`, your listener will be called during the last `Wiegand.setPinState()`. Easy!
+Use `Wiegand.onReceiveError()` to listen to errors.
 
-On the other hand, if you are using automatic message size detections (`Wiegand.begin()`), the message will only be available a few milliseconds after the last bit is received, since the library must wait little longer to ensure the message is complete.
+The callback receive the raw (non-decoded) message.
 
-In this case, you should call `Wiegand.flush()` after suficient time (`WIEGAND_TIMEOUT` milliseconds) has elapsed. The easiest way is to call it from your main loop.
+The error can be any of these:
+- `Communication`: The message was received right away after the library started listening, so the first bits are likely lost.
+- `SizeTooBig`: The payload is bigger than the internal buffer. The payload will be truncated to `Wiegand::MAX_BITS` 
+- `SizeUnexpected`: The library was configured to expect a specific number of bits, but we received a truncated message.
+- `DecodeFailed`: The library was initialized with `decode_messages=true` (the default), but doesn't support the message format it received.
+- `VerificationFailed`: The library was initialized with `decode_messages=true`, received a message with one of the known formats, but the message failed the parity checks.
+
+
+## Padding
+
+Wiegand messages have weird amounts of bits, but callbacks receive byte arrays.
+
+Because of this, if the payload on with wiegand data is not multiple of 8 bits, it will be padded with zeros on the most significant bits of the first byte.
+
+This is _probably_ what you want, so that a 4-bit message with `0xf` is encoded as `[0x0f]` instead of `[0xf0]`
+
+
+## Automatic message size detection
+
+If the message size is specified on `Wiegand.begin(size)`, your listener will be called as soon as the last bit is received, inside the call to `Wiegand.setPinState()`. Easy!
+
+On the other hand, if you are using automatic message size detections (`Wiegand.begin(Wiegand::LENGTH_ANY)`), the library considers a message finished after a few milliseconds without events.
+
+In this case, you must call `Wiegand.flush()` after suficient time (`WIEGAND_TIMEOUT` milliseconds) has elapsed. The easiest way is to call it from your main loop.
 
 __This library is not thread safe__. If you are using interruptions to detect changes in pin state, call `Wiegand.flush()` with interruptions disabled.
 
@@ -181,5 +217,5 @@ This library supports detection of the card reader.
 
 Use `Wiegand.onStateChange()` to listen to plug/unplug events.
 
-To use this feature, you'll need to add a pull-down resistor on both data pins. This will set the input on a invalid state when the reader is unplugged.
+To use this feature, you'll need to add a pull-down resistor on both data pins. This will set the input on a invalid state (LOW-LOW) when the reader is unplugged.
 
